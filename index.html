@@ -42,7 +42,8 @@
         let board = ["", "", "", "", "", "", "", "", ""];
         let tttActive = true;
 
-        function checkUrlChange() {
+        // FIXED: WAKES UP INSTANTLY ONLY ON LINK TAPS (NO TIMERS)
+        window.onhashchange = function() {
             let hash = window.location.hash;
             if (!hash) return;
             window.location.hash = ""; 
@@ -59,7 +60,7 @@
                 document.getElementById("ttt-status").innerText = "Your turn!";
                 for(let i=0; i<9; i++) { document.getElementById("l"+i).innerText = "."; document.getElementById("l"+i).href = "#X"+i; }
             }
-        }
+        };
 
         function checkLineAI(p, i1, i2, i3) {
             if (board[i1] === p && board[i2] === p && board[i3] === "") return i3;
@@ -123,8 +124,6 @@
             if (board[2]===p && board[4]===p && board[6]===p) return true;
             return false;
         }
-
-        setInterval(checkUrlChange, 100);
     </script>
 </body>
 </html>
