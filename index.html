@@ -2,24 +2,24 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>My Kobo Games</title>
+    <title>My Kobo Games Launcher</title>
     <style>
         body { font-family: Arial, sans-serif; padding: 10px; text-align: center; background: white; color: black; margin: 0; }
-        .kobo-page { page-break-after: always; break-after: page; min-height: 95vh; box-sizing: border-box; padding-bottom: 20px; }
+        .kobo-page { page-break-after: always; break-after: page; min-height: 95vh; box-sizing: border-box; padding-bottom: 30px; }
         
-        /* OLD SCHOOL TABLE GRID SPECIFICALLY FOR KOBO SCREENS */
-        .game-table { margin: 15px auto; border-collapse: collapse; }
-        .cell { width: 85px; height: 85px; font-size: 40px; font-weight: bold; background: white; border: 4px solid black; cursor: pointer; text-align: center; vertical-align: middle; user-select: none; }
+        /* 🕹️ TIC-TAC-TOE BUTTON GRID LAYOUT */
+        .ttt-row { margin: 10px 0; }
+        .ttt-btn { width: 85px; height: 85px; font-size: 38px; font-weight: bold; background: white; border: 4px solid black; margin: 4px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; }
         
-        /* HANGMAN KEYBOARD TABLE */
-        .kb-table { margin: 10px auto; border-collapse: separate; border-spacing: 5px; }
-        .letter-btn { width: 42px; height: 45px; font-size: 18px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; text-align: center; vertical-align: middle; user-select: none; }
-        .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; cursor: default; background: #eee; }
+        /* ⌨️ HANGMAN NATIVE FIXED BUTTON KEYBOARD */
+        .kb-row { margin: 8px 0; clear: both; }
+        .letter-btn { width: 32px; height: 42px; font-size: 16px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; margin: 3px; padding: 0; text-align: center; vertical-align: middle; }
+        .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; background: #eee; cursor: default; }
         
         .theme-select { font-size: 18px; padding: 6px; margin: 10px auto; border: 3px solid black; font-weight: bold; }
-        .word-display { font-size: 34px; font-weight: bold; letter-spacing: 6px; margin: 15px auto; min-height: 45px; }
-        button.action-btn { font-size: 20px; padding: 10px 25px; background: white; border: 3px solid black; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .status-text { font-size: 22px; font-weight: bold; margin-top: 10px; }
+        .word-display { font-size: 32px; font-weight: bold; letter-spacing: 6px; margin: 15px auto; min-height: 40px; }
+        button.action-btn { font-size: 18px; padding: 10px 25px; background: white; border: 3px solid black; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        .status-text { font-size: 22px; font-weight: bold; margin-top: 10px; min-height: 30px; }
     </style>
 </head>
 <body>
@@ -29,27 +29,24 @@
         <h2>Page 1: Tic-Tac-Toe</h2>
         <p>You are <b>X</b> | Computer is <b>O</b></p>
         
-        <!-- TRADITIONAL HTML TABLE FIXED THE COLLAPSED LINE BUG -->
-        <table class="game-table">
-            <tr>
-                <td class="cell" id="c0" onclick="cellClicked(0)"></td>
-                <td class="cell" id="c1" onclick="cellClicked(1)"></td>
-                <td class="cell" id="c2" onclick="cellClicked(2)"></td>
-            </tr>
-            <tr>
-                <td class="cell" id="c3" onclick="cellClicked(3)"></td>
-                <td class="cell" id="c4" onclick="cellClicked(4)"></td>
-                <td class="cell" id="c5" onclick="cellClicked(5)"></td>
-            </tr>
-            <tr>
-                <td class="cell" id="c6" onclick="cellClicked(6)"></td>
-                <td class="cell" id="c7" onclick="cellClicked(7)"></td>
-                <td class="cell" id="c8" onclick="cellClicked(8)"></td>
-            </tr>
-        </table>
+        <!-- NATIVE BUTTON ROWS GUARANTEE TOUCH REGISTRATION -->
+        <div class="ttt-row">
+            <button class="ttt-btn" id="c0" onclick="cellClicked(0)">&nbsp;</button>
+            <button class="ttt-btn" id="c1" onclick="cellClicked(1)">&nbsp;</button>
+            <button class="ttt-btn" id="c2" onclick="cellClicked(2)">&nbsp;</button>
+        </div>
+        <div class="ttt-row">
+            <button class="ttt-btn" id="c3" onclick="cellClicked(3)">&nbsp;</button>
+            <button class="ttt-btn" id="c4" onclick="cellClicked(4)">&nbsp;</button>
+            <button class="ttt-btn" id="c5" onclick="cellClicked(5)">&nbsp;</button>
+        </div>
+        <div class="ttt-row">
+            <button class="ttt-btn" id="c6" onclick="cellClicked(6)">&nbsp;</button>
+            <button class="ttt-btn" id="c7" onclick="cellClicked(7)">&nbsp;</button>
+            <button class="ttt-btn" id="c8" onclick="cellClicked(8)">&nbsp;</button>
+        </div>
         
         <div id="ttt-status" class="status-text">Your turn!</div>
-        <br>
         <button class="action-btn" onclick="resetTTT()">Restart Game</button>
     </div>
 
@@ -68,11 +65,42 @@
         </select>
         
         <div id="hm-status" class="status-text">Turns remaining: 6</div>
-        
         <div class="word-display" id="wordBox">_ _ _ _ _</div>
         
-        <!-- FIXED KEYBOARD CONTAINER USING TRADITIONAL TABLE -->
-        <div id="keyboardContainer"></div>
+        <!-- FIXED PERMANENT BUTTONS REMOVE KEYBOARD DISAPPEARING BUG -->
+        <div class="kb-row">
+            <button class="letter-btn" id="key-Q" onclick="guessLetter('Q')">Q</button>
+            <button class="letter-btn" id="key-W" onclick="guessLetter('W')">W</button>
+            <button class="letter-btn" id="key-E" onclick="guessLetter('E')">E</button>
+            <button class="letter-btn" id="key-R" onclick="guessLetter('R')">R</button>
+            <button class="letter-btn" id="key-T" onclick="guessLetter('T')">T</button>
+            <button class="letter-btn" id="key-Y" onclick="guessLetter('Y')">Y</button>
+            <button class="letter-btn" id="key-U" onclick="guessLetter('U')">U</button>
+            <button class="letter-btn" id="key-I" onclick="guessLetter('I')">I</button>
+            <button class="letter-btn" id="key-O" onclick="guessLetter('O')">O</button>
+            <button class="letter-btn" id="key-P" onclick="guessLetter('P')">P</button>
+        </div>
+        <div class="kb-row">
+            <button class="letter-btn" id="key-A" onclick="guessLetter('A')">A</button>
+            <button class="letter-btn" id="key-S" onclick="guessLetter('S')">S</button>
+            <button class="letter-btn" id="key-D" onclick="guessLetter('D')">D</button>
+            <button class="letter-btn" id="key-F" onclick="guessLetter('F')">F</button>
+            <button class="letter-btn" id="key-G" onclick="guessLetter('G')">G</button>
+            <button class="letter-btn" id="key-H" onclick="guessLetter('H')">H</button>
+            <button class="letter-btn" id="key-J" onclick="guessLetter('J')">J</button>
+            <button class="letter-btn" id="key-K" onclick="guessLetter('K')">K</button>
+            <button class="letter-btn" id="key-L" onclick="guessLetter('L')">L</button>
+        </div>
+        <div class="kb-row">
+            <button class="letter-btn" id="key-Z" onclick="guessLetter('Z')">Z</button>
+            <button class="letter-btn" id="key-X" onclick="guessLetter('X')">X</button>
+            <button class="letter-btn" id="key-C" onclick="guessLetter('C')">C</button>
+            <button class="letter-btn" id="key-V" onclick="guessLetter('V')">V</button>
+            <button class="letter-btn" id="key-B" onclick="guessLetter('B')">B</button>
+            <button class="letter-btn" id="key-N" onclick="guessLetter('N')">N</button>
+            <button class="letter-btn" id="key-M" onclick="guessLetter('M')">M</button>
+        </div>
+        
         <br>
         <button class="action-btn" onclick="startHangman()">New Word</button>
     </div>
@@ -101,7 +129,7 @@
                 
                 tttActive = false;
                 document.getElementById("ttt-status").innerText = "Computer thinking...";
-                setTimeout(computerMove, 400);
+                setTimeout(computerMove, 500);
             }
         }
 
@@ -173,7 +201,9 @@
 
         function updateTTTDisplay() {
             for (let i = 0; i < 9; i++) { 
-                document.getElementById("c" + i).innerText = tttBoard["p" + i]; 
+                let val = tttBoard["p" + i];
+                // Using non-breaking space if empty to prevent box collapse
+                document.getElementById("c" + i).innerHTML = (val === "") ? "&nbsp;" : val; 
             }
         }
 
@@ -205,12 +235,19 @@
             if (chosenTheme === "gaming") rawWordString = wordsGaming;
             
             let pool = rawWordString.split(" ");
-            
             secretWord = pool[Math.floor(Math.random() * pool.length)];
             guessedLetters = ""; 
             remainingTurns = 6;
+            
             document.getElementById("hm-status").innerText = "Turns remaining: " + remainingTurns;
-            buildKeyboardTable(); 
+            
+            // Re-enable all keyboard keys for the new game
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let i = 0; i < alphabet.length; i++) {
+                let btn = document.getElementById("key-" + alphabet.charAt(i));
+                if (btn) btn.disabled = false;
+            }
+            
             updateWordDisplay();
         }
 
@@ -233,33 +270,13 @@
             }
         }
 
-        // BUILDS THE KEYBOARD ROWS OUT OF HTML TABLES TR/TD INSTEAD OF FLEXBOX
-        function buildKeyboardTable() {
-            let container = document.getElementById("keyboardContainer");
-            
-            let row1 = "QWERTYUIOP";
-            let row2 = "ASDFGHJKL";
-            let row3 = "ZXCVBNM";
-            
-            let html = '<table class="kb-table"><tr>';
-            for(let i=0; i<row1.length; i++) { html += makeKeyHtml(row1.charAt(i)); }
-            html += '</tr><tr>';
-            for(let i=0; i<row2.length; i++) { html += makeKeyHtml(row2.charAt(i)); }
-            html += '<td></td></tr><tr><td></td>'; // alignment padding
-            for(let i=0; i<row3.length; i++) { html += makeKeyHtml(row3.charAt(i)); }
-            html += '<td></td></tr></table>';
-            
-            container.innerHTML = html;
-        }
-
-        function makeKeyHtml(l) {
-            return '<td><button class="letter-btn" id="key-' + l + '" onclick="guessLetter(\'' + l + '\')">' + l + '</button></td>';
-        }
-
         function guessLetter(letter) {
             if (guessedLetters.indexOf(letter) !== -1) return;
             guessedLetters += letter; 
-            document.getElementById("key-" + letter).disabled = true;
+            
+            let btn = document.getElementById("key-" + letter);
+            if (btn) btn.disabled = true;
+            
             if (secretWord.indexOf(letter) !== -1) { 
                 updateWordDisplay(); 
             } else {
@@ -280,6 +297,7 @@
             }
         }
 
+        // Boot up everything cleanly
         window.onload = function() { 
             resetTTT();
             startHangman(); 
