@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kobo Tic-Tac-Toe</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        .game-table { margin: 20px auto; border-collapse: collapse; }
+        .cell-link { display: block; width: 85px; height: 85px; font-size: 46px; font-weight: bold; color: black; text-decoration: none; line-height: 85px; text-align: center; background: white; }
+        .cell-td { width: 85px; height: 85px; border: 4px solid black; padding: 0; }
+        .menu-link { display: inline-block; font-size: 18px; font-weight: bold; color: black; text-decoration: none; padding: 10px 20px; border: 3px solid black; margin: 20px; background: white; }
+    </style>
+</head>
+<body>
+    <h2>Tic-Tac-Toe</h2>
+    <div id="gridBox"></div>
+    <h3 id="status">Your turn!</h3>
+    <a class="menu-link" href="?">Restart Grid</a>
+
+    <script>
+        let params = new URLSearchParams(window.location.search);
+        let bStr = params.get("b") || ".........";
+        let board = bStr.split("");
+
+        function drawGrid() {
+            let html = '<table class="game-table"><tr>';
+            for (let i = 0; i < 9; i++) {
+                let display = board[i] === "." ? "." : board[i];
+                let nextBoard = [...board];
+                
+                if (board[i] === ".") {
+                    nextBoard[i] = "X";
+                    let empty = [];
+                    for(let j=0; j<9; j++) { if(nextBoard[j] === ".") empty.push(j); }
+                    if(empty.length > 0) {
+                        let cpuMove = empty[Math.floor(Math.random() * empty.length)];
+                        nextBoard[cpuMove] = "O";
+                    }
+                }
+                
+                html += '<td class="cell-td">';
+                if (board[i] === ".") {
+                    html += '<a class="cell-link" href="?b=' + nextBoard.join("") + '">' + display + '</a>';
+                } else {
+                    html += '<span class="cell-link">' + display + '</span>';
+                }
+                html += '</td>';
+                if (i === 2 || i === 5) html += '</tr><tr>';
+            }
+            html += '</tr></table>';
+            document.getElementById("gridBox").innerHTML = html;
+            checkWinner();
+        }
+
+        function checkWinner() {
+            let win = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for (let combo of win) {
+                if (board[combo[0]] !== "." && board[combo[0]] === board[combo[1]] && board[combo[0]] === board[combo[2]]) {
+                    document.getElementById("status").innerText = board[combo[0]] + " Wins! 🎉";
+                    return;
+                }
+            }
+            if (!board.includes(".")) document.getElementById("status").innerText = "It's a Tie! 🤝";
+        }
+
+        drawGrid();
+    </script>
+</body>
+</html>
