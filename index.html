@@ -9,16 +9,16 @@
         
         /* 🕹️ TIC-TAC-TOE BUTTON GRID LAYOUT */
         .ttt-row { margin: 10px 0; }
-        .ttt-btn { width: 85px; height: 85px; font-size: 38px; font-weight: bold; background: white; border: 4px solid black; margin: 4px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; }
+        .ttt-btn { width: 85px; height: 85px; font-size: 38px; font-weight: bold; background: white; border: 4px solid black; margin: 4px; padding: 0; cursor: pointer; text-align: center; vertical-align: middle; color: black; }
         
         /* ⌨️ HANGMAN NATIVE FIXED BUTTON KEYBOARD */
         .kb-row { margin: 8px 0; clear: both; }
-        .letter-btn { width: 32px; height: 42px; font-size: 16px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; margin: 3px; padding: 0; text-align: center; vertical-align: middle; }
+        .letter-btn { width: 32px; height: 42px; font-size: 16px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; margin: 3px; padding: 0; text-align: center; vertical-align: middle; color: black; }
         .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; background: #eee; cursor: default; }
         
         .theme-select { font-size: 18px; padding: 6px; margin: 10px auto; border: 3px solid black; font-weight: bold; }
         .word-display { font-size: 32px; font-weight: bold; letter-spacing: 6px; margin: 15px auto; min-height: 40px; }
-        button.action-btn { font-size: 18px; padding: 10px 25px; background: white; border: 3px solid black; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        button.action-btn { font-size: 18px; padding: 10px 25px; background: white; border: 3px solid black; cursor: pointer; margin-top: 15px; font-weight: bold; color: black; }
         .status-text { font-size: 22px; font-weight: bold; margin-top: 10px; min-height: 30px; }
     </style>
 </head>
@@ -29,7 +29,6 @@
         <h2>Page 1: Tic-Tac-Toe</h2>
         <p>You are <b>X</b> | Computer is <b>O</b></p>
         
-        <!-- NATIVE BUTTON ROWS GUARANTEE TOUCH REGISTRATION -->
         <div class="ttt-row">
             <button class="ttt-btn" id="c0" onclick="cellClicked(0)">&nbsp;</button>
             <button class="ttt-btn" id="c1" onclick="cellClicked(1)">&nbsp;</button>
@@ -67,7 +66,6 @@
         <div id="hm-status" class="status-text">Turns remaining: 6</div>
         <div class="word-display" id="wordBox">_ _ _ _ _</div>
         
-        <!-- FIXED PERMANENT BUTTONS REMOVE KEYBOARD DISAPPEARING BUG -->
         <div class="kb-row">
             <button class="letter-btn" id="key-Q" onclick="guessLetter('Q')">Q</button>
             <button class="letter-btn" id="key-W" onclick="guessLetter('W')">W</button>
@@ -202,7 +200,6 @@
         function updateTTTDisplay() {
             for (let i = 0; i < 9; i++) { 
                 let val = tttBoard["p" + i];
-                // Using non-breaking space if empty to prevent box collapse
                 document.getElementById("c" + i).innerHTML = (val === "") ? "&nbsp;" : val; 
             }
         }
@@ -241,7 +238,6 @@
             
             document.getElementById("hm-status").innerText = "Turns remaining: " + remainingTurns;
             
-            // Re-enable all keyboard keys for the new game
             let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for (let i = 0; i < alphabet.length; i++) {
                 let btn = document.getElementById("key-" + alphabet.charAt(i));
@@ -297,7 +293,6 @@
             }
         }
 
-        // Boot up everything cleanly
         window.onload = function() { 
             resetTTT();
             startHangman(); 
