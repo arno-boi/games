@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Kobo Offline Games</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        
+        /* THIS CODE CREATES THE PAGE BREAK FOR YOUR KOBO */
+        .kobo-page { page-break-after: always; break-after: page; min-height: 90vh; box-sizing: border-box; padding-bottom: 40px; }
+        
+        /* Tic-Tac-Toe Styles */
+        .grid { display: grid; grid-template-columns: repeat(3, 90px); gap: 8px; justify-content: center; margin: 20px auto; }
+        .cell { width: 90px; height: 90px; font-size: 38px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
+        
+        /* Hangman Styles */
+        .theme-select { font-size: 16px; padding: 5px; margin: 10px auto; border: 2px solid black; font-weight: bold; }
+        .word-display { font-size: 32px; font-weight: bold; letter-spacing: 8px; margin: 15px auto; min-height: 40px; }
+        .keyboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 400px; margin: 15px auto; }
+        .letter-btn { width: 34px; height: 38px; font-size: 16px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
+        .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; cursor: default; }
+        
+        button.action-btn { font-size: 18px; padding: 10px 20px; background: white; border: 2px solid black; cursor: pointer; margin-top: 15px; }
+        .status-text { font-size: 20px; font-weight: bold; margin-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <!-- 📖 PAGE 1: TIC-TAC-TOE -->
+    <div class="kobo-page">
+        <h2>Page 1: Tic-Tac-Toe</h2>
+        <p>You are <b>X</b> | Computer is <b>O</b></p>
+        
+        <div class="grid">
+            <div class="cell" id="c0" onclick="cellClicked(0)"></div>
+            <div class="cell" id="c1" onclick="cellClicked(1)"></div>
+            <div class="cell" id="c2" onclick="cellClicked(2)"></div>
+            <div class="cell" id="c3" onclick="cellClicked(3)"></div>
+            <div class="cell" id="c4" onclick="cellClicked(4)"></div>
+            <div class="cell" id="c5" onclick="cellClicked(5)"></div>
+            <div class="cell" id="c6" onclick="cellClicked(6)"></div>
+            <div class="cell" id="c7" onclick="cellClicked(7)"></div>
+            <div class="cell" id="c8" onclick="cellClicked(8)"></div>
+        </div>
+        
+        <div id="ttt-status" class="status-text">Your turn!</div>
+        <br>
+        <button class="action-btn" onclick="resetTTT()">Restart Game</button>
+    </div>
+
+
+    <!-- 📖 PAGE 2: HANGMAN -->
+    <div class="kobo-page">
+        <h2>Page 2: Hangman</h2>
+        <p>Choose a theme and guess the hidden word!</p>
+        
+        <!-- Theme Selection Dropdown -->
+        <select id="themeSelector" class="theme-select" onchange="startHangman()">
+            <option value="animals">🐾 Animals</option>
+            <option value="food">🍕 Food</option>
+            <option value="sport">⚽ Sport</option>
+            <option value="movies">🎬 Movies & TV</option>
+            <option value="gaming">🎮 Video Games</option>
+        </select>
+        
+        <div id="hm-status" class="status-text">Turns remaining: 6</div>
+        
+        <div class="word-display" id="wordBox">_ _ _ _ _</div>
+        
+        <div class="keyboard" id="keys"></div>
+        <br>
+        <button class="action-btn" onclick="startHangman()">New Word</button>
+    </div>
+    <!-- 🧠 GAME SCRIPTS -->
+    <script>
+        // ==================== GAME 1: TIC-TAC-TOE LOGIC ====================
+        let tttBoard = { p0:"", p1:"", p2:"", p3:"", p4:"", p5:"", p6:"", p7:"", p8:"" };
+        let tttActive = true;
+
+        function cellClicked(idx) {
+            let key = "p" + idx;
+            if (tttBoard[key] === "" && tttActive) {
+                tttBoard[key] = "X";
+                updateTTTDisplay();
+                
+                if (checkTTTWin("X")) {
+                    document.getElementById("ttt-status").innerText = "You Win! 🎉";
+                    tttActive = false;
+                    return;
+                }
+                if (isTTTFull()) {
+                    document.getElementById("ttt-status").innerText = "It's a Tie! 🤝";
+                    tttActive = false;
+                    return;
+                }
+                
+                tttActive = false;
+                document.getElementById("ttt-status").innerText = "Computer thinking...";
+                setTimeout(computerMove, 400);
+            }
+        }
+
+        function isTTTFull() {
+            for (let i = 0; i < 9; i++) {
+                if (tttBoard["p" + i] === "") return false;
+            }
+            return true;
+        }
+
+        function computerMove() {
+            let move = findTTTSmartMove("O") || findTTTSmartMove("X");
+            if (move === null && tttBoard.p4 === "") move = 4;
+            if (move === null) {
+                let empty = [];
+                for (let i = 0; i < 9; i++) { 
+                    if (tttBoard["p" + i] === "") empty.push(i); 
+                }
+                if (empty.length > 0) move = empty[Math.floor(Math.random() * empty.length)];
+            }
+            if (move !== null) {
+                tttBoard["p" + move] = "O";
+                updateTTTDisplay();
+                if (checkTTTWin("O")) {
+                    document.getElementById("ttt-status").innerText = "Computer Wins! 🤖";
+                } else if (isTTTFull()) {
+                    document.getElementById("ttt-status").innerText = "It's a Tie! 🤝";
+                } else {
+                    document.getElementById("ttt-status").innerText = "Your turn!";
+                    tttActive = true;
+                }
+            }
+        }
+
+        function checkTTTLine(p, i1, i2, i3) {
+            let v1 = tttBoard["p" + i1];
+            let v2 = tttBoard["p" + i2];
+            let v3 = tttBoard["p" + i3];
+            if (v1 === p && v2 === p && v3 === "") return i3;
+            if (v1 === p && v3 === p && v2 === "") return i2;
+            if (v2 === p && v3 === p && v1 === "") return i1;
+            return null;
+        }
+
+        function findTTTSmartMove(player) {
+            let r;
+            r = checkTTTLine(player, 0, 1, 2); if (r !== null) return r;
+            r = checkTTTLine(player, 3, 4, 5); if (r !== null) return r;
+            r = checkTTTLine(player, 6, 7, 8); if (r !== null) return r;
+            r = checkTTTLine(player, 0, 3, 6); if (r !== null) return r;
+            r = checkTTTLine(player, 1, 4, 7); if (r !== null) return r;
+            r = checkTTTLine(player, 2, 5, 8); if (r !== null) return r;
+            r = checkTTTLine(player, 0, 4, 8); if (r !== null) return r;
+            r = checkTTTLine(player, 2, 4, 6); if (r !== null) return r;
+            return null;
+        }
+
+        function checkTTTWin(p) {
+            if (tttBoard.p0 === p && tttBoard.p1 === p && tttBoard.p2 === p) return true;
+            if (tttBoard.p3 === p && tttBoard.p4 === p && tttBoard.p5 === p) return true;
+            if (tttBoard.p6 === p && tttBoard.p7 === p && tttBoard.p8 === p) return true;
+            if (tttBoard.p0 === p && tttBoard.p3 === p && tttBoard.p6 === p) return true;
+            if (tttBoard.p1 === p && tttBoard.p4 === p && tttBoard.p7 === p) return true;
+            if (tttBoard.p2 === p && tttBoard.p5 === p && tttBoard.p8 === p) return true;
+            if (tttBoard.p0 === p && tttBoard.p4 === p && tttBoard.p8 === p) return true;
+            if (tttBoard.p2 === p && tttBoard.p4 === p && tttBoard.p6 === p) return true;
+            return false;
+        }
+
+        function updateTTTDisplay() {
+            for (let i = 0; i < 9; i++) { 
+                document.getElementById("c" + i).innerText = tttBoard["p" + i]; 
+            }
+        }
+
+        function resetTTT() {
+            tttBoard = { p0:"", p1:"", p2:"", p3:"", p4:"", p5:"", p6:"", p7:"", p8:"" }; 
+            tttActive = true;
+            document.getElementById("ttt-status").innerText = "Your turn!"; 
+            updateTTTDisplay();
+        }
+
+        // ==================== GAME 2: HANGMAN LOGIC ====================
+        // Written as space-separated strings to safely bypass bracket bugs
+        const wordsAnimals = "LION TIGER ZEBRA MONKEY ELEPHANT GIRAFFE DOLPHIN KANGAROO PENGUIN KOALA";
+        const wordsFood = "PIZZA BURGER PASTA TACO SALAD STEAK CHICKEN SUSHI WAFFLE PANCAKE";
+        const wordsSport = "SOCCER TENNIS BASKETBALL CRICKET RUGBY HOCKEY GOLF BOXING SWIMMING RUNNING";
+        const wordsMovies = "BATMAN AVENGERS INCEPTION TITANIC SIMPSONS POKEMON MATRIX TARZAN SHREK FROZEN";
+        const wordsGaming = "MARIO ZELDA PACMAN TETRIS MINECRAFT POKEMON FORTNITE SONIC HALO DOOM";
+
+        let secretWord = ""; 
+        let guessedLetters = ""; 
+        let remainingTurns = 6;
+
+        function startHangman() {
+            let chosenTheme = document.getElementById("themeSelector").value;
+            let rawWordString = wordsAnimals; // Default
+            
+            if (chosenTheme === "food") rawWordString = wordsFood;
+            if (chosenTheme === "sport") rawWordString = wordsSport;
+            if (chosenTheme === "movies") rawWordString = wordsMovies;
+            if (chosenTheme === "gaming") rawWordString = wordsGaming;
+            
+            // Turn the space string into an array automatically
+            let pool = rawWordString.split(" ");
+            
+            secretWord = pool[Math.floor(Math.random() * pool.length)];
+            guessedLetters = ""; 
+            remainingTurns = 6;
+            document.getElementById("hm-status").innerText = "Turns remaining: " + remainingTurns;
+            buildKeyboard(); 
+            updateWordDisplay();
+        }
+
+        function updateWordDisplay() {
+            let displayStr = "";
+            let won = true;
+            for (let i = 0; i < secretWord.length; i++) {
+                let letter = secretWord.charAt(i);
+                if (guessedLetters.indexOf(letter) !== -1) { 
+                    displayStr += letter + " "; 
+                } else { 
+                    displayStr += "_ "; 
+                    won = false;
+                }
+            }
+            document.getElementById("wordBox").innerText = displayStr.trim();
+            if (won) { 
+                document.getElementById("hm-status").innerText = "You Won! 🎉"; 
+                disableAllKeys(); 
+            }
+        }
+
+        function buildKeyboard() {
+            let keysContainer = document.getElementById("keys"); 
+            keysContainer.innerHTML = "";
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let i = 0; i < alphabet.length; i++) {
+                let l = alphabet.charAt(i); 
+                let btn = document.createElement("button");
+                btn.className = "letter-btn"; 
+                btn.innerText = l; 
+                btn.id = "key-" + l;
+                btn.onclick = function() { guessLetter(l); }; 
+                keysContainer.appendChild(btn);
+            }
+        }
+
+        function guessLetter(letter) {
+            if (guessedLetters.indexOf(letter) !== -1) return;
+            guessedLetters += letter; 
+            document.getElementById("key-" + letter).disabled = true;
+            if (secretWord.indexOf(letter) !== -1) { 
+                updateWordDisplay(); 
+            } else {
+                remainingTurns--; 
+                document.getElementById("hm-status").innerText = "Turns remaining: " + remainingTurns;
+                if (remainingTurns <= 0) { 
+                    document.getElementById("hm-status").innerText = "Game Over! 🤖 Word was: " + secretWord; 
+                    disableAllKeys(); 
+                }
+            }
+        }
+
+        function disableAllKeys() {
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let i = 0; i < alphabet.length; i++) {
+                let btn = document.getElementById("key-" + alphabet.charAt(i));
+                if (btn) btn.disabled = true;
+            }
+        }
+
+        // Initialize both games immediately on load
+        window.onload = function() { 
+            resetTTT();
+            startHangman(); 
+        };
+    </script>
+</body>
+</html>
