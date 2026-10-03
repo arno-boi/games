@@ -2,126 +2,51 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>My Kobo Games</title>
+    <title>Kobo Tic-Tac-Toe</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 10px; text-align: center; background: white; color: black; margin: 0; }
-        .kobo-page { page-break-after: always; break-after: page; min-height: 95vh; box-sizing: border-box; padding-bottom: 30px; }
-        
-        /* RIGID OLD-SCHOOL LINK TABLES LIKE E-INK.CLUB */
-        .game-table { margin: 20px auto; border-collapse: collapse; }
-        .cell-link { display: block; width: 80px; height: 80px; font-size: 42px; font-weight: bold; color: black; text-decoration: none; line-height: 80px; text-align: center; background: white; }
-        .cell-td { width: 80px; height: 80px; border: 4px solid black; padding: 0; }
-        
-        .kb-table { margin: 15px auto; border-collapse: separate; border-spacing: 4px; }
-        .key-link { display: block; width: 32px; height: 42px; font-size: 18px; font-weight: bold; color: black; text-decoration: none; line-height: 42px; text-align: center; border: 3px solid black; background: white; }
-        .key-td { padding: 0; }
-        
-        .word-box { font-size: 34px; font-weight: bold; letter-spacing: 6px; margin: 20px auto; min-height: 40px; }
-        .menu-link { display: inline-block; font-size: 18px; font-weight: bold; color: black; text-decoration: none; padding: 10px 20px; border: 3px solid black; margin: 10px; background: white; }
-        .status-text { font-size: 22px; font-weight: bold; margin-top: 15px; min-height: 35px; }
+        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        .game-table { margin: 30px auto; border-collapse: collapse; }
+        .cell-link { display: block; width: 85px; height: 85px; font-size: 46px; font-weight: bold; color: black; text-decoration: none; line-height: 85px; text-align: center; background: white; }
+        .cell-td { width: 85px; height: 85px; border: 4px solid black; padding: 0; }
+        .menu-link { display: inline-block; font-size: 18px; font-weight: bold; color: black; text-decoration: none; padding: 10px 20px; border: 3px solid black; margin: 20px; background: white; }
+        .status-text { font-size: 24px; font-weight: bold; margin-top: 15px; min-height: 35px; }
     </style>
 </head>
 <body>
 
-    <!-- 📖 PAGE 1: TIC-TAC-TOE -->
-    <div class="kobo-page">
-        <h2>Page 1: Tic-Tac-Toe</h2>
-        <p>Tap any blank box text link to place your <b>X</b>.</p>
-        
-        <table class="game-table">
-            <tr>
-                <td class="cell-td"><a id="l0" class="cell-link" href="#X0">.</a></td>
-                <td class="cell-td"><a id="l1" class="cell-link" href="#X1">.</a></td>
-                <td class="cell-td"><a id="l2" class="cell-link" href="#X2">.</a></td>
-            </tr>
-            <tr>
-                <td class="cell-td"><a id="l3" class="cell-link" href="#X3">.</a></td>
-                <td class="cell-td"><a id="l4" class="cell-link" href="#X4">.</a></td>
-                <td class="cell-td"><a id="l5" class="cell-link" href="#X5">.</a></td>
-            </tr>
-            <tr>
-                <td class="cell-td"><a id="l6" class="cell-link" href="#X6">.</a></td>
-                <td class="cell-td"><a id="l7" class="cell-link" href="#X7">.</a></td>
-                <td class="cell-td"><a id="l8" class="cell-link" href="#X8">.</a></td>
-            </tr>
-        </table>
-        
-        <div id="ttt-status" class="status-text">Your turn!</div>
-        <a class="menu-link" href="#RESET_TTT">Restart Grid</a>
-    </div>
+    <h2>Tic-Tac-Toe</h2>
+    <p>Tap any blank dot link to place your <b>X</b>.</p>
+    
+    <table class="game-table">
+        <tr>
+            <td class="cell-td"><a id="l0" class="cell-link" href="#X0">.</a></td>
+            <td class="cell-td"><a id="l1" class="cell-link" href="#X1">.</a></td>
+            <td class="cell-td"><a id="l2" class="cell-link" href="#X2">.</a></td>
+        </tr>
+        <tr>
+            <td class="cell-td"><a id="l3" class="cell-link" href="#X3">.</a></td>
+            <td class="cell-td"><a id="l4" class="cell-link" href="#X4">.</a></td>
+            <td class="cell-td"><a id="l5" class="cell-link" href="#X5">.</a></td>
+        </tr>
+        <tr>
+            <td class="cell-td"><a id="l6" class="cell-link" href="#X6">.</a></td>
+            <td class="cell-td"><a id="l7" class="cell-link" href="#X7">.</a></td>
+            <td class="cell-td"><a id="l8" class="cell-link" href="#X8">.</a></td>
+        </tr>
+    </table>
+    
+    <div id="ttt-status" class="status-text">Your turn!</div>
+    <a class="menu-link" href="#RESET_TTT">Restart Grid</a>
 
-
-    <!-- 📖 PAGE 2: HANGMAN -->
-    <div class="kobo-page">
-        <h2>Page 2: Hangman</h2>
-        <p>Tap a theme link to choose, then click alphabet letters!</p>
-        
-        <div style="margin: 10px auto;">
-            <a class="menu-link" href="#T_ANIMALS">🐾 Animals</a>
-            <a class="menu-link" href="#T_FOOD">🍕 Food</a>
-            <a class="menu-link" href="#T_GAMING">🎮 Gaming</a>
-        </div>
-        
-        <div id="hm-status" class="status-text">Choose a theme above to begin!</div>
-        <div class="word-box" id="wordBox">_ _ _ _ _</div>
-        
-        <!-- PURE LINK-BASED KEYBOARD MATRIX -->
-        <table class="kb-table">
-            <tr>
-                <td class="key-td"><a id="k-Q" class="key-link" href="#K_Q">Q</a></td>
-                <td class="key-td"><a id="k-W" class="key-link" href="#K_W">W</a></td>
-                <td class="key-td"><a id="k-E" class="key-link" href="#K_E">E</a></td>
-                <td class="key-td"><a id="k-R" class="key-link" href="#K_R">R</a></td>
-                <td class="key-td"><a id="k-T" class="key-link" href="#K_T">T</a></td>
-                <td class="key-td"><a id="k-Y" class="key-link" href="#K_Y">Y</a></td>
-                <td class="key-td"><a id="k-U" class="key-link" href="#K_U">U</a></td>
-                <td class="key-td"><a id="k-I" class="key-link" href="#K_I">I</a></td>
-                <td class="key-td"><a id="k-O" class="key-link" href="#K_O">O</a></td>
-                <td class="key-td"><a id="k-P" class="key-link" href="#K_P">P</a></td>
-            </tr>
-            <tr>
-                <td class="key-td"></td>
-                <td class="key-td"><a id="k-A" class="key-link" href="#K_A">A</a></td>
-                <td class="key-td"><a id="k-S" class="key-link" href="#K_S">S</a></td>
-                <td class="key-td"><a id="k-D" class="key-link" href="#K_D">D</a></td>
-                <td class="key-td"><a id="k-F" class="key-link" href="#K_F">F</a></td>
-                <td class="key-td"><a id="k-G" class="key-link" href="#K_G">G</a ></td>
-                <td class="key-td"><a id="k-H" class="key-link" href="#K_H">H</a></td>
-                <td class="key-td"><a id="k-J" class="key-link" href="#K_J">J</a></td>
-                <td class="key-td"><a id="k-K" class="key-link" href="#K_K">K</a></td>
-                <td class="key-td"><a id="k-L" class="key-link" href="#K_L">L</a></td>
-            </tr>
-            <tr>
-                <td class="key-td"></td>
-                <td class="key-td"></td>
-                <td class="key-td"><a id="k-Z" class="key-link" href="#K_Z">Z</a></td>
-                <td class="key-td"><a id="k-X" class="key-link" href="#K_X">X</a></td>
-                <td class="key-td"><a id="k-C" class="key-link" href="#K_C">C</a></td>
-                <td class="key-td"><a id="k-V" class="key-link" href="#K_V">V</a></td>
-                <td class="key-td"><a id="k-B" class="key-link" href="#K_B">B</a></td>
-                <td class="key-td"><a id="k-N" class="key-link" href="#K_N">N</a></td>
-                <td class="key-td"><a id="k-M" class="key-link" href="#K_M">M</a></td>
-                <td class="key-td"></td>
-            </tr>
-        </table>
-    </div>
-        <!-- 🧠 GAME SCRIPTS RUN VIA NAVIGATION DETECTORS -->
     <script>
         let board = ["", "", "", "", "", "", "", "", ""];
         let tttActive = true;
-        
-        let pool = ["KOBO", "BOOK", "READ", "PAGE", "EPUB"];
-        let secretWord = "KOBO"; 
-        let guessed = ""; 
-        let turns = 6;
 
-        // TRACKS URL CLICKS FOR KOBO NAVIGATION BYPASS
         function checkUrlChange() {
             let hash = window.location.hash;
             if (!hash) return;
-            window.location.hash = ""; // Clear hash immediately
+            window.location.hash = ""; 
 
-            // 🕹️ TIC-TAC-TOE LINK COMMANDS
             if (hash.indexOf("#X") === 0 && tttActive) {
                 let idx = parseInt(hash.charAt(2));
                 if (board[idx] === "") {
@@ -134,29 +59,26 @@
                 document.getElementById("ttt-status").innerText = "Your turn!";
                 for(let i=0; i<9; i++) { document.getElementById("l"+i).innerText = "."; document.getElementById("l"+i).href = "#X"+i; }
             }
+        }
 
-            // ⌨️ HANGMAN THEME COMMANDS
-            if (hash === "#T_ANIMALS") { pool = ["LION", "TIGER", "ZEBRA", "MONKEY", "KOALA"]; resetHm(); }
-            if (hash === "#T_FOOD") { pool = ["PIZZA", "BURGER", "PASTA", "TACO", "STEAK"]; resetHm(); }
-            if (hash === "#T_GAMING") { pool = ["MARIO", "ZELDA", "PACMAN", "TETRIS", "SONIC"]; resetHm(); }
+        function checkLineAI(p, i1, i2, i3) {
+            if (board[i1] === p && board[i2] === p && board[i3] === "") return i3;
+            if (board[i1] === p && board[i3] === p && board[i2] === "") return i2;
+            if (board[i2] === p && board[i3] === p && board[i1] === "") return i1;
+            return null;
+        }
 
-            // HANGMAN KEYBOARD MOVES
-            if (hash.indexOf("#K_") === 0 && turns > 0) {
-                let letter = hash.charAt(3);
-                if (guessed.indexOf(letter) === -1) {
-                    guessed += letter;
-                    document.getElementById("k-"+letter).style.background = "#eee";
-                    document.getElementById("k-"+letter).style.color = "#ccc";
-                    document.getElementById("k-"+letter).href = "#USED";
-                    
-                    if (secretWord.indexOf(letter) !== -1) { updateHmWord(); } 
-                    else {
-                        turns--;
-                        document.getElementById("hm-status").innerText = "Turns remaining: " + turns;
-                        if (turns <= 0) { document.getElementById("hm-status").innerText = "Game Over! Word: " + secretWord; }
-                    }
-                }
-            }
+        function findSmartMove(player) {
+            let r;
+            r = checkLineAI(player, 0, 1, 2); if (r !== null) return r;
+            r = checkLineAI(player, 3, 4, 5); if (r !== null) return r;
+            r = checkLineAI(player, 6, 7, 8); if (r !== null) return r;
+            r = checkLineAI(player, 0, 3, 6); if (r !== null) return r;
+            r = checkLineAI(player, 1, 4, 7); if (r !== null) return r;
+            r = checkLineAI(player, 2, 5, 8); if (r !== null) return r;
+            r = checkLineAI(player, 0, 4, 8); if (r !== null) return r;
+            r = checkLineAI(player, 2, 4, 6); if (r !== null) return r;
+            return null;
         }
 
         function runTttTurn() {
@@ -164,14 +86,20 @@
             if (checkTttWin("X")) { document.getElementById("ttt-status").innerText = "You Win! 🎉"; tttActive = false; return; }
             if (!board.includes("")) { document.getElementById("ttt-status").innerText = "It's a Tie! 🤝"; tttActive = false; return; }
             
-            // Computer takes its turn instantly
-            let empty = [];
-            for (let i = 0; i < 9; i++) { if (board[i] === "") empty.push(i); }
-            if (empty.length > 0) {
-                let cpuMove = empty[Math.floor(Math.random() * empty.length)];
+            let cpuMove = findSmartMove("O");
+            if (cpuMove === null) cpuMove = findSmartMove("X");
+            if (cpuMove === null && board[4] === "") cpuMove = 4;
+            if (cpuMove === null) {
+                let empty = [];
+                for (let i = 0; i < 9; i++) { if (board[i] === "") empty.push(i); }
+                if (empty.length > 0) cpuMove = empty[Math.floor(Math.random() * empty.length)];
+            }
+            
+            if (cpuMove !== null) {
                 board[cpuMove] = "O";
                 updateTttView();
                 if (checkTttWin("O")) { document.getElementById("ttt-status").innerText = "Computer Wins! 🤖"; tttActive = false; }
+                else if (!board.includes("")) { document.getElementById("ttt-status").innerText = "It's a Tie! 🤝"; tttActive = false; }
             }
         }
 
@@ -185,43 +113,18 @@
         }
 
         function checkTttWin(p) {
-            let win = [
-                [0,1,2],[3,4,5],[6,7,8], // rows
-                [0,3,6],[1,4,7],[2,5,8], // cols
-                [0,4,8],[2,4,6]          // diags
-            ];
-            return win.some(combo => combo.every(i => board[i] === p));
+            if (board[0]===p && board[1]===p && board[2]===p) return true;
+            if (board[3]===p && board[4]===p && board[5]===p) return true;
+            if (board[6]===p && board[7]===p && board[8]===p) return true;
+            if (board[0]===p && board[3]===p && board[6]===p) return true;
+            if (board[1]===p && board[4]===p && board[7]===p) return true;
+            if (board[2]===p && board[5]===p && board[8]===p) return true;
+            if (board[0]===p && board[4]===p && board[8]===p) return true;
+            if (board[2]===p && board[4]===p && board[6]===p) return true;
+            return false;
         }
 
-        function resetHm() {
-            secretWord = pool[Math.floor(Math.random() * pool.length)];
-            guessed = ""; turns = 6;
-            document.getElementById("hm-status").innerText = "Turns remaining: " + turns;
-            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for(let i=0; i<alphabet.length; i++) {
-                let l = alphabet.charAt(i);
-                document.getElementById("k-"+l).style.background = "white";
-                document.getElementById("k-"+l).style.color = "black";
-                document.getElementById("k-"+l).href = "#K_" + l;
-            }
-            updateHmWord();
-        }
-
-        function updateHmWord() {
-            let out = ""; let won = true;
-            for (let i = 0; i < secretWord.length; i++) {
-                let l = secretWord.charAt(i);
-                if (guessed.indexOf(l) !== -1) { out += l + " "; } 
-                else { out += "_ "; won = false; }
-            }
-            document.getElementById("wordBox").innerText = out.trim();
-            if (won && turns > 0) { document.getElementById("hm-status").innerText = "You Won! 🎉"; }
-        }
-
-        // AUTO-WATCHES FOR KOBO LINK TOUCHES EVERY FRACTION OF A SECOND
         setInterval(checkUrlChange, 100);
-        window.onload = function() { resetHm(); };
     </script>
 </body>
 </html>
-
