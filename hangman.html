@@ -70,7 +70,8 @@
         let pool = ["KOBO", "BOOK", "READ", "PAGE", "EPUB"];
         let secretWord = "KOBO"; let guessed = ""; let turns = 6;
 
-        function checkUrlChange() {
+        // FIXED: DRIVEN PURLEY BY TOUCH HOOK CHANGES (NO BACKGROUND TIMERS)
+        window.onhashchange = function() {
             let hash = window.location.hash;
             if (!hash) return;
             window.location.hash = ""; 
@@ -95,7 +96,7 @@
                     }
                 }
             }
-        }
+        };
 
         function resetHm() {
             secretWord = pool[Math.floor(Math.random() * pool.length)];
@@ -122,7 +123,6 @@
             if (won && turns > 0) { document.getElementById("hm-status").innerText = "You Won! 🎉"; }
         }
 
-        setInterval(checkUrlChange, 100);
         window.onload = function() { resetHm(); };
     </script>
 </body>
