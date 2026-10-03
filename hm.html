@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kobo Hangman</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        .kb-table { margin: 20px auto; border-collapse: separate; border-spacing: 5px; }
+        .key-link { display: block; width: 34px; height: 44px; font-size: 18px; font-weight: bold; color: black; text-decoration: none; line-height: 44px; text-align: center; border: 3px solid black; background: white; }
+        .word-box { font-size: 36px; font-weight: bold; letter-spacing: 6px; margin: 25px auto; }
+        .menu-link { display: inline-block; font-size: 18px; font-weight: bold; color: black; text-decoration: none; padding: 10px 20px; border: 3px solid black; margin: 8px; background: white; }
+    </style>
+</head>
+<body>
+    <h2>Hangman</h2>
+    <div style="margin: 15px auto;">
+        <a class="menu-link" href="?w=KOALA">🐾 Animals</a>
+        <a class="menu-link" href="?w=BURGER">🍕 Food</a>
+        <a class="menu-link" href="?w=TETRIS">🎮 Gaming</a>
+    </div>
+    
+    <div class="word-box" id="wordBox">_ _ _ _ _</div>
+    <h3 id="status">Turns remaining: 6</h3>
+    <div id="keyboard"></div>
+
+    <script>
+        let params = new URLSearchParams(window.location.search);
+        let secret = params.get("w") || "KOALA";
+        let guessed = params.get("g") || "";
+        
+        function drawGame() {
+            let out = ""; let won = true; let turns = 6;
+            for (let i = 0; i < guessed.length; i++) {
+                if (secret.indexOf(guessed[i]) === -1) turns--;
+            }
+            
+            for (let i = 0; i < secret.length; i++) {
+                let l = secret.charAt(i);
+                if (guessed.indexOf(l) !== -1) out += l + " ";
+                else { out += "_ "; won = false; }
+            }
+            document.getElementById("wordBox").innerText = out.trim();
+            document.getElementById("status").innerText = "Turns remaining: " + turns;
+            
+            if (won) { document.getElementById("status").innerText = "You Won! 🎉"; return; }
+            if (turns <= 0) { document.getElementById("status").innerText = "Game Over! Word was: " + secret; return; }
+
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let html = '<table class="kb-table"><tr>';
+            for (let i = 0; i < alphabet.length; i++) {
+                let l = alphabet.charAt(i);
+                if (guessed.indexOf(l) !== -1) {
+                    html += '<td><span class="key-link" style="background:#eee;color:#ccc;">' + l + '</span></td>';
+                } else {
+                    html += '<td><a class="key-link" href="?w=' + secret + '&g=' + guessed + l + '">' + l + '</a></td>';
+                }
+                if (i === 9 || i === 18) html += '</tr><tr>';
+            }
+            html += '</tr></table>';
+            document.getElementById("keyboard").innerHTML = html;
+        }
+        drawGame();
+    </script>
+</body>
+</html>
