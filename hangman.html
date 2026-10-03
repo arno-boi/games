@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Kobo Hangman</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        .kb-table { margin: 20px auto; border-collapse: separate; border-spacing: 5px; }
+        .key-link { display: block; width: 34px; height: 44px; font-size: 18px; font-weight: bold; color: black; text-decoration: none; line-height: 44px; text-align: center; border: 3px solid black; background: white; }
+        .key-td { padding: 0; }
+        .word-box { font-size: 36px; font-weight: bold; letter-spacing: 6px; margin: 25px auto; min-height: 45px; }
+        .menu-link { display: inline-block; font-size: 18px; font-weight: bold; color: black; text-decoration: none; padding: 10px 20px; border: 3px solid black; margin: 8px; background: white; }
+        .status-text { font-size: 24px; font-weight: bold; margin-top: 15px; min-height: 35px; }
+    </style>
+</head>
+<body>
+
+    <h2>Hangman</h2>
+    <p>Tap a theme link to choose, then guess alphabet letters!</p>
+    
+    <div style="margin: 15px auto;">
+        <a class="menu-link" href="#T_ANIMALS">🐾 Animals</a>
+        <a class="menu-link" href="#T_FOOD">🍕 Food</a>
+        <a class="menu-link" href="#T_GAMING">🎮 Gaming</a>
+    </div>
+    
+    <div id="hm-status" class="status-text">Choose a theme above to begin!</div>
+    <div class="word-box" id="wordBox">_ _ _ _ _</div>
+    
+    <table class="kb-table">
+        <tr>
+            <td class="key-td"><a id="k-Q" class="key-link" href="#K_Q">Q</a></td>
+            <td class="key-td"><a id="k-W" class="key-link" href="#K_W">W</a></td>
+            <td class="key-td"><a id="k-E" class="key-link" href="#K_E">E</a></td>
+            <td class="key-td"><a id="k-R" class="key-link" href="#K_R">R</a></td>
+            <td class="key-td"><a id="k-T" class="key-link" href="#K_T">T</a></td>
+            <td class="key-td"><a id="k-Y" class="key-link" href="#K_Y">Y</a></td>
+            <td class="key-td"><a id="k-U" class="key-link" href="#K_U">U</a></td>
+            <td class="key-td"><a id="k-I" class="key-link" href="#K_I">I</a></td>
+            <td class="key-td"><a id="k-O" class="key-link" href="#K_O">O</a></td>
+            <td class="key-td"><a id="k-P" class="key-link" href="#K_P">P</a></td>
+        </tr>
+        <tr>
+            <td class="key-td"></td>
+            <td class="key-td"><a id="k-A" class="key-link" href="#K_A">A</a></td>
+            <td class="key-td"><a id="k-S" class="key-link" href="#K_S">S</a></td>
+            <td class="key-td"><a id="k-D" class="key-link" href="#K_D">D</a></td>
+            <td class="key-td"><a id="k-F" class="key-link" href="#K_F">F</a></td>
+            <td class="key-td"><a id="k-G" class="key-link" href="#K_G">G</a></td>
+            <td class="key-td"><a id="k-H" class="key-link" href="#K_H">H</a></td>
+            <td class="key-td"><a id="k-J" class="key-link" href="#K_J">J</a></td>
+            <td class="key-td"><a id="k-K" class="key-link" href="#K_K">K</a></td>
+            <td class="key-td"><a id="k-L" class="key-link" href="#K_L">L</a></td>
+        </tr>
+        <tr>
+            <td class="key-td"></td>
+            <td class="key-td"></td>
+            <td class="key-td"><a id="k-Z" class="key-link" href="#K_Z">Z</a></td>
+            <td class="key-td"><a id="k-X" class="key-link" href="#K_X">X</a></td>
+            <td class="key-td"><a id="k-C" class="key-link" href="#K_C">C</a></td>
+            <td class="key-td"><a id="k-V" class="key-link" href="#K_V">V</a></td>
+            <td class="key-td"><a id="k-B" class="key-link" href="#K_B">B</a></td>
+            <td class="key-td"><a id="k-N" class="key-link" href="#K_N">N</a></td>
+            <td class="key-td"><a id="k-M" class="key-link" href="#K_M">M</a></td>
+            <td class="key-td"></td>
+        </tr>
+    </table>
+
+    <script>
+        let pool = ["KOBO", "BOOK", "READ", "PAGE", "EPUB"];
+        let secretWord = "KOBO"; let guessed = ""; let turns = 6;
+
+        function checkUrlChange() {
+            let hash = window.location.hash;
+            if (!hash) return;
+            window.location.hash = ""; 
+
+            if (hash === "#T_ANIMALS") { pool = ["LION", "TIGER", "ZEBRA", "MONKEY", "KOALA"]; resetHm(); }
+            if (hash === "#T_FOOD") { pool = ["PIZZA", "BURGER", "PASTA", "TACO", "STEAK"]; resetHm(); }
+            if (hash === "#T_GAMING") { pool = ["MARIO", "ZELDA", "PACMAN", "TETRIS", "SONIC"]; resetHm(); }
+
+            if (hash.indexOf("#K_") === 0 && turns > 0) {
+                let letter = hash.charAt(3);
+                if (guessed.indexOf(letter) === -1) {
+                    guessed += letter;
+                    document.getElementById("k-"+letter).style.background = "#eee";
+                    document.getElementById("k-"+letter).style.color = "#ccc";
+                    document.getElementById("k-"+letter).href = "#USED";
+                    
+                    if (secretWord.indexOf(letter) !== -1) { updateHmWord(); } 
+                    else {
+                        turns--;
+                        document.getElementById("hm-status").innerText = "Turns remaining: " + turns;
+                        if (turns <= 0) { document.getElementById("hm-status").innerText = "Game Over! Word: " + secretWord; }
+                    }
+                }
+            }
+        }
+
+        function resetHm() {
+            secretWord = pool[Math.floor(Math.random() * pool.length)];
+            guessed = ""; turns = 6;
+            document.getElementById("hm-status").innerText = "Turns remaining: " + turns;
+            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for(let i=0; i<alphabet.length; i++) {
+                let l = alphabet.charAt(i);
+                document.getElementById("k-"+l).style.background = "white";
+                document.getElementById("k-"+l).style.color = "black";
+                document.getElementById("k-"+l).href = "#K_" + l;
+            }
+            updateHmWord();
+        }
+
+        function updateHmWord() {
+            let out = ""; let won = true;
+            for (let i = 0; i < secretWord.length; i++) {
+                let l = secretWord.charAt(i);
+                if (guessed.indexOf(l) !== -1) { out += l + " "; } 
+                else { out += "_ "; won = false; }
+            }
+            document.getElementById("wordBox").innerText = out.trim();
+            if (won && turns > 0) { document.getElementById("hm-status").innerText = "You Won! 🎉"; }
+        }
+
+        setInterval(checkUrlChange, 100);
+        window.onload = function() { resetHm(); };
+    </script>
+</body>
+</html>
