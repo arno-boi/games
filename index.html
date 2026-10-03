@@ -2,26 +2,24 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>My Kobo Offline Games</title>
+    <title>My Kobo Games</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 15px; text-align: center; background: white; color: black; margin: 0; }
+        body { font-family: Arial, sans-serif; padding: 10px; text-align: center; background: white; color: black; margin: 0; }
+        .kobo-page { page-break-after: always; break-after: page; min-height: 95vh; box-sizing: border-box; padding-bottom: 20px; }
         
-        /* THIS CODE CREATES THE PAGE BREAK FOR YOUR KOBO */
-        .kobo-page { page-break-after: always; break-after: page; min-height: 90vh; box-sizing: border-box; padding-bottom: 40px; }
+        /* OLD SCHOOL TABLE GRID SPECIFICALLY FOR KOBO SCREENS */
+        .game-table { margin: 15px auto; border-collapse: collapse; }
+        .cell { width: 85px; height: 85px; font-size: 40px; font-weight: bold; background: white; border: 4px solid black; cursor: pointer; text-align: center; vertical-align: middle; user-select: none; }
         
-        /* Tic-Tac-Toe Styles */
-        .grid { display: grid; grid-template-columns: repeat(3, 90px); gap: 8px; justify-content: center; margin: 20px auto; }
-        .cell { width: 90px; height: 90px; font-size: 38px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
+        /* HANGMAN KEYBOARD TABLE */
+        .kb-table { margin: 10px auto; border-collapse: separate; border-spacing: 5px; }
+        .letter-btn { width: 42px; height: 45px; font-size: 18px; font-weight: bold; background: white; border: 3px solid black; cursor: pointer; text-align: center; vertical-align: middle; user-select: none; }
+        .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; cursor: default; background: #eee; }
         
-        /* Hangman Styles */
-        .theme-select { font-size: 16px; padding: 5px; margin: 10px auto; border: 2px solid black; font-weight: bold; }
-        .word-display { font-size: 32px; font-weight: bold; letter-spacing: 8px; margin: 15px auto; min-height: 40px; }
-        .keyboard { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; max-width: 400px; margin: 15px auto; }
-        .letter-btn { width: 34px; height: 38px; font-size: 16px; font-weight: bold; background: white; border: 2px solid black; cursor: pointer; display: flex; align-items: center; justify-content: center; user-select: none; }
-        .letter-btn[disabled] { border: 1px dashed #ccc; color: #ccc; cursor: default; }
-        
-        button.action-btn { font-size: 18px; padding: 10px 20px; background: white; border: 2px solid black; cursor: pointer; margin-top: 15px; }
-        .status-text { font-size: 20px; font-weight: bold; margin-top: 15px; }
+        .theme-select { font-size: 18px; padding: 6px; margin: 10px auto; border: 3px solid black; font-weight: bold; }
+        .word-display { font-size: 34px; font-weight: bold; letter-spacing: 6px; margin: 15px auto; min-height: 45px; }
+        button.action-btn { font-size: 20px; padding: 10px 25px; background: white; border: 3px solid black; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .status-text { font-size: 22px; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -31,17 +29,24 @@
         <h2>Page 1: Tic-Tac-Toe</h2>
         <p>You are <b>X</b> | Computer is <b>O</b></p>
         
-        <div class="grid">
-            <div class="cell" id="c0" onclick="cellClicked(0)"></div>
-            <div class="cell" id="c1" onclick="cellClicked(1)"></div>
-            <div class="cell" id="c2" onclick="cellClicked(2)"></div>
-            <div class="cell" id="c3" onclick="cellClicked(3)"></div>
-            <div class="cell" id="c4" onclick="cellClicked(4)"></div>
-            <div class="cell" id="c5" onclick="cellClicked(5)"></div>
-            <div class="cell" id="c6" onclick="cellClicked(6)"></div>
-            <div class="cell" id="c7" onclick="cellClicked(7)"></div>
-            <div class="cell" id="c8" onclick="cellClicked(8)"></div>
-        </div>
+        <!-- TRADITIONAL HTML TABLE FIXED THE COLLAPSED LINE BUG -->
+        <table class="game-table">
+            <tr>
+                <td class="cell" id="c0" onclick="cellClicked(0)"></td>
+                <td class="cell" id="c1" onclick="cellClicked(1)"></td>
+                <td class="cell" id="c2" onclick="cellClicked(2)"></td>
+            </tr>
+            <tr>
+                <td class="cell" id="c3" onclick="cellClicked(3)"></td>
+                <td class="cell" id="c4" onclick="cellClicked(4)"></td>
+                <td class="cell" id="c5" onclick="cellClicked(5)"></td>
+            </tr>
+            <tr>
+                <td class="cell" id="c6" onclick="cellClicked(6)"></td>
+                <td class="cell" id="c7" onclick="cellClicked(7)"></td>
+                <td class="cell" id="c8" onclick="cellClicked(8)"></td>
+            </tr>
+        </table>
         
         <div id="ttt-status" class="status-text">Your turn!</div>
         <br>
@@ -54,7 +59,6 @@
         <h2>Page 2: Hangman</h2>
         <p>Choose a theme and guess the hidden word!</p>
         
-        <!-- Theme Selection Dropdown -->
         <select id="themeSelector" class="theme-select" onchange="startHangman()">
             <option value="animals">🐾 Animals</option>
             <option value="food">🍕 Food</option>
@@ -67,7 +71,8 @@
         
         <div class="word-display" id="wordBox">_ _ _ _ _</div>
         
-        <div class="keyboard" id="keys"></div>
+        <!-- FIXED KEYBOARD CONTAINER USING TRADITIONAL TABLE -->
+        <div id="keyboardContainer"></div>
         <br>
         <button class="action-btn" onclick="startHangman()">New Word</button>
     </div>
@@ -180,7 +185,6 @@
         }
 
         // ==================== GAME 2: HANGMAN LOGIC ====================
-        // Written as space-separated strings to safely bypass bracket bugs
         const wordsAnimals = "LION TIGER ZEBRA MONKEY ELEPHANT GIRAFFE DOLPHIN KANGAROO PENGUIN KOALA";
         const wordsFood = "PIZZA BURGER PASTA TACO SALAD STEAK CHICKEN SUSHI WAFFLE PANCAKE";
         const wordsSport = "SOCCER TENNIS BASKETBALL CRICKET RUGBY HOCKEY GOLF BOXING SWIMMING RUNNING";
@@ -193,21 +197,20 @@
 
         function startHangman() {
             let chosenTheme = document.getElementById("themeSelector").value;
-            let rawWordString = wordsAnimals; // Default
+            let rawWordString = wordsAnimals;
             
             if (chosenTheme === "food") rawWordString = wordsFood;
             if (chosenTheme === "sport") rawWordString = wordsSport;
             if (chosenTheme === "movies") rawWordString = wordsMovies;
             if (chosenTheme === "gaming") rawWordString = wordsGaming;
             
-            // Turn the space string into an array automatically
             let pool = rawWordString.split(" ");
             
             secretWord = pool[Math.floor(Math.random() * pool.length)];
             guessedLetters = ""; 
             remainingTurns = 6;
             document.getElementById("hm-status").innerText = "Turns remaining: " + remainingTurns;
-            buildKeyboard(); 
+            buildKeyboardTable(); 
             updateWordDisplay();
         }
 
@@ -230,19 +233,27 @@
             }
         }
 
-        function buildKeyboard() {
-            let keysContainer = document.getElementById("keys"); 
-            keysContainer.innerHTML = "";
-            let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for (let i = 0; i < alphabet.length; i++) {
-                let l = alphabet.charAt(i); 
-                let btn = document.createElement("button");
-                btn.className = "letter-btn"; 
-                btn.innerText = l; 
-                btn.id = "key-" + l;
-                btn.onclick = function() { guessLetter(l); }; 
-                keysContainer.appendChild(btn);
-            }
+        // BUILDS THE KEYBOARD ROWS OUT OF HTML TABLES TR/TD INSTEAD OF FLEXBOX
+        function buildKeyboardTable() {
+            let container = document.getElementById("keyboardContainer");
+            
+            let row1 = "QWERTYUIOP";
+            let row2 = "ASDFGHJKL";
+            let row3 = "ZXCVBNM";
+            
+            let html = '<table class="kb-table"><tr>';
+            for(let i=0; i<row1.length; i++) { html += makeKeyHtml(row1.charAt(i)); }
+            html += '</tr><tr>';
+            for(let i=0; i<row2.length; i++) { html += makeKeyHtml(row2.charAt(i)); }
+            html += '<td></td></tr><tr><td></td>'; // alignment padding
+            for(let i=0; i<row3.length; i++) { html += makeKeyHtml(row3.charAt(i)); }
+            html += '<td></td></tr></table>';
+            
+            container.innerHTML = html;
+        }
+
+        function makeKeyHtml(l) {
+            return '<td><button class="letter-btn" id="key-' + l + '" onclick="guessLetter(\'' + l + '\')">' + l + '</button></td>';
         }
 
         function guessLetter(letter) {
@@ -269,7 +280,6 @@
             }
         }
 
-        // Initialize both games immediately on load
         window.onload = function() { 
             resetTTT();
             startHangman(); 
